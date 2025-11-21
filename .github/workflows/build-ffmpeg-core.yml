@@ -1,0 +1,38 @@
+name: Build SoXR ffmpeg-core
+
+on:
+  workflow_dispatch:
+
+env:
+  BUILD_OUTPUT: packages/core-mt/dist
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show docker info
+        run: |
+          docker version
+          docker buildx ls
+
+      - name: Build ffmpeg-core (SoXR enabled)
+        run: |
+          make prd-mt
+
+      - name: List build artifacts
+        run: |
+          ls -R "${BUILD_OUTPUT}"
+
+      - name: Upload ffmpeg-core artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-core-soxr
+          path: |
+            ${BUILD_OUTPUT}/ffmpeg-core.js
+            ${BUILD_OUTPUT}/ffmpeg-core.wasm
+            ${BUILD_OUTPUT}/ffmpeg-core.worker.js
+          if-no-files-found: error
+
