@@ -34,8 +34,8 @@ jobs:
         with:
           name: ffmpeg-core-soxr
           path: |
-            ${BUILD_OUTPUT}/umd/ffmpeg-core.js
-            ${BUILD_OUTPUT}/umd/ffmpeg-core.wasm
-            ${BUILD_OUTPUT}/umd/ffmpeg-core.worker.js
+            packages/core-mt/dist/umd/ffmpeg-core.js
+            packages/core-mt/dist/umd/ffmpeg-core.wasm
+            packages/core-mt/dist/umd/ffmpeg-core.worker.js
           if-no-files-found: error
 
