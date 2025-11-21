@@ -2,6 +2,9 @@ name: Build SoXR ffmpeg-core
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 env:
   BUILD_OUTPUT: packages/core-mt/dist
@@ -31,8 +34,8 @@ jobs:
         with:
           name: ffmpeg-core-soxr
           path: |
-            ${BUILD_OUTPUT}/ffmpeg-core.js
-            ${BUILD_OUTPUT}/ffmpeg-core.wasm
-            ${BUILD_OUTPUT}/ffmpeg-core.worker.js
+            ${BUILD_OUTPUT}/umd/ffmpeg-core.js
+            ${BUILD_OUTPUT}/umd/ffmpeg-core.wasm
+            ${BUILD_OUTPUT}/umd/ffmpeg-core.worker.js
           if-no-files-found: error
 
