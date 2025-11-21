@@ -1,0 +1,44 @@
+name: Build SoXR ffmpeg-core (single-threaded)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-ffmpeg-core-st.yml'
+
+env:
+  BUILD_OUTPUT: packages/core/dist
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+            network=host
+
+      - name: Build ffmpeg-core (SoXR enabled, single-threaded)
+        run: |
+          make prd EXTRA_ARGS="--cache-from type=gha --cache-to type=gha,mode=max"
+
+      - name: List build artifacts
+        run: |
+          ls -R "${BUILD_OUTPUT}"
+
+      - name: Upload ffmpeg-core artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-core-soxr-st
+          path: |
+            packages/core/dist/umd/ffmpeg-core.js
+            packages/core/dist/umd/ffmpeg-core.wasm
+          if-no-files-found: error
+
